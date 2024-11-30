@@ -1,0 +1,62 @@
+extends javascript
+
+priority 1
+
+snippet ",t\b" "type" r
+<$1>
+endsnippet
+
+snippet "\bimp\b|\bimpl\b" "implements" r
+implements ${1}
+endsnippet
+
+#CLOSURE
+
+snippet "\bpu\b" "public" r
+public`!p
+if (t[1] and t[1].strip()[0] != ':'):
+	res = ' '
+`${1}
+endsnippet
+snippet "\b(pr|pi)\b" "private" r
+private`!p
+if (t[1] and t[1].strip()[0] != ':'):
+	res = ' '
+`${1}
+endsnippet
+
+snippet "\bpo\b" "protected" r
+protected`!p
+if (t[1] and t[1].strip()[0] != ':'):
+	res = ' '
+`${1}
+endsnippet
+
+snippet "\b([\,]{0,1})ta\b" "type annotation" r
+`!p
+if match.group(1):
+	snip.rv = " "
+`: $1
+endsnippet
+
+snippet "\bab\b|\babs\b" "absract" r
+abstract $1
+endsnippet
+
+snippet "([^@]|^)\bin\b" "interface" r
+`!p
+snip.rv=match.group(1)
+`interface`!p
+if t[1] and t[1][0] != " ":
+	snip.rv += " "
+`$1 {`!p
+if (t[2] and t[2].find('\n') != 0):
+	snip >> 1
+	snip += ''
+else:
+	res = ''`${2}`!p
+if (t[2] and t[2].find('\n') != 0):
+	snip += '}'
+else:
+	res = '}'`$3
+endsnippet

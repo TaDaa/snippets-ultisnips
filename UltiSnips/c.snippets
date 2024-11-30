@@ -1,0 +1,767 @@
+###########################################################################
+#                            TextMate Snippets                            #
+###########################################################################
+
+snippet def "#define ..."
+#define ${1}
+endsnippet
+
+snippet ifn "#ifndef ... #define ... #endif"
+#ifndef $1
+#define ${1:`!p snip.rv = snip.basename`}
+#endif
+endsnippet
+
+snippet #if "#if #endif" !b
+#if ${1:0}
+${VISUAL}${0:${VISUAL/(.*)/(?1::code)/}}
+#endif
+endsnippet
+
+snippet in "#include local header (inc)"
+#include "${1:`!p snip.rv = snip.basename + '.h'`}"
+endsnippet
+
+snippet int "#include <> (Inc)"
+#include <${1:.h}>
+endsnippet
+
+snippet mark "#pragma mark (mark)"
+#if 0
+${1:#pragma mark -
+}#pragma mark $2
+#endif
+
+$0
+endsnippet
+
+snippet main "main() (main)"
+int main(int argc, char *argv[])
+{
+	${VISUAL}${0:${VISUAL/(.*)/(?1::\/* code *\/)/}}
+	return 0;
+}
+endsnippet
+
+#snippet for "for loop (for)"
+#for (${2:i} = 0; $2 < ${1:count}; ${3:++$2})
+#{
+	#${VISUAL}${0:${VISUAL/(.*)/(?1::\/* code *\/)/}}
+#}
+#endsnippet
+
+#snippet fori "for int loop (fori)"
+#for (${4:int} ${2:i} = 0; $2 < ${1:count}; ${3:++$2})
+#{
+	#${VISUAL}${0:${VISUAL/(.*)/(?1::\/* code *\/)/}}
+#}
+#endsnippet
+
+#snippet enum "Enumeration"
+#enum ${1:name} { $0 };
+#endsnippet
+
+snippet en "enum .. (enum)"
+enum${1/.+/ /m}${1} {`!p
+if (t[2] and t[2].find('\n') != 0):
+	snip >> 1
+	snip += ''
+else:
+	res = ''`${2}`!p
+if (t[2] and t[2].find('\n') != 0):
+	snip += '};'
+else:
+	res = '};'`
+endsnippet
+
+#snippet once "Include header once only guard"
+##ifndef ${1:`!p
+#if not snip.c:
+	#import random, string
+	#name = re.sub(r'[^A-Za-z0-9]+','_', snip.fn).upper()
+	#rand = ''.join(random.sample(string.ascii_letters+string.digits, 8))
+	#snip.rv = ('%s_%s' % (name,rand)).upper()
+#else:
+    #snip.rv = snip.c`}
+##define $1
+
+#${0}
+
+#endif /* end of include guard: $1 */
+
+#endsnippet
+
+snippet td "Typedef"
+typedef ${1:int} ${2:MyCustomType};
+endsnippet
+
+#snippet wh "while loop"
+#while(${1:/* condition */}) {
+	#${VISUAL}${0:${VISUAL/(.*)/(?1::\/* code *\/)/}}
+#}
+#endsnippet
+
+#snippet do "do...while loop (do)"
+#do {
+	#${VISUAL}${0:${VISUAL/(.*)/(?1::\/* code *\/)/}}
+#} while(${1:/* condition */});
+#endsnippet
+
+snippet fprintf "fprintf ..."
+fprintf(${1:stderr}, "${2:%s}\n"${2/([^%]|%%)*(%.)?.*/(?2:, :\);)/}$3${2/([^%]|%%)*(%.)?.*/(?2:\);)/}
+endsnippet
+
+#snippet if "if .. (if)"
+#if (${1:/* condition */})
+#{
+	#${VISUAL}${0:${VISUAL/(.*)/(?1::\/* code *\/)/}}
+#}
+#endsnippet
+
+#IF
+snippet "\bif\b" "if..." r
+if ($1) {`!p
+if (t[2] and t[2].find('\n') != 0):
+	snip >> 1
+	snip += ''
+else:
+	res = ''`${2}`!p
+if (t[2] and t[2].find('\n') != 0):
+	snip += '}'
+else:
+	res = '}'`${3/.+/ /}${3}
+endsnippet
+
+#ELSE IF
+snippet "\bei\b|\belseif\b" "else i.." r
+else if ($1) {`!p
+if (t[2] and t[2].find('\n') != 0):
+	snip >> 1
+	snip += ''
+else:
+	res = ''`${2}`!p
+if (t[2] and t[2].find('\n') != 0):
+	snip += '}'
+else:
+	res = '}'`${3/.+/ /}${3}
+endsnippet
+
+#ELSE
+snippet "\bel\b|\belse\b" "else..." r
+else {`!p
+if (t[1] and t[1].find('\n') != 0):
+	snip >> 1
+	snip += ''
+else:
+	res = ''`${1}`!p
+if (t[1] and t[1].find('\n') != 0):
+	snip += '}'
+else:
+	res = '}'`
+endsnippet
+
+snippet ",t\b" "type" r
+<$1>
+endsnippet
+
+#snippet el "else .. (else)"
+#else {
+	#${VISUAL}${0:${VISUAL/(.*)/(?1::\/* code *\/)/}}
+#}
+#endsnippet
+
+#snippet ife "if .. else (ife)"
+#if (${1:/* condition */})
+#{
+	#${2:/* code */}
+#}
+#else
+#{
+	#${3:/* else */}
+#}
+#endsnippet
+
+snippet printf "printf .. (printf)"
+printf("${1:%s}\n"${1/([^%]|%%)*(%.)?.*/(?2:, :\);)/}$2${1/([^%]|%%)*(%.)?.*/(?2:\);)/}
+endsnippet
+
+snippet fun "function" b
+${1:void} ${2:function_name}(${3})
+{
+	${VISUAL}${0:${VISUAL/(.*)/(?1::\/* code *\/)/}}
+}
+endsnippet
+
+snippet fund "function declaration" b
+${1:void} ${2:function_name}(${3});
+endsnippet
+
+#fld
+snippet fld "for loop - increment down and cached length (decrementer, assume 0)" w
+for (${1};${1/(int[\s\t]*)|((=|,).*)//g}>=0;${1/(int[\s\t]*)|((=|,).*)//g}--) {`!p
+if (t[2] and t[2].find('\n') != 0):
+	snip >> 1
+	snip += ''
+else:
+	res = ''`${2}`!p
+if (t[2] and t[2].find('\n') != 0):
+	snip += '}'
+else:
+	res = '}'`${3}
+endsnippet
+snippet "\bsw|switch\b" "switch..." r
+switch (${1}) {`!p
+if (t[2] and t[2].find('\n') != 0):
+	snip >> 1
+	snip += ''
+else:
+	res = ''
+`${2:case }`!p
+if (t[3] and t[3].find('\n') != 0):
+	snip >> 1
+	snip += ''
+else:
+	res = ''
+`${3:default }
+}
+${4}
+endsnippet
+snippet "(?<!')(?![.])+'p" "single quote" r
+'+
+'${1}'${2}
+endsnippet
+#STRING -single
+snippet "''p\b" "single quote" r
+'${1}'+
+'${2}'${3}
+endsnippet
+#STRING -double
+snippet "(?<!\")(?![.])+\"p" "single quote" r
+"+
+"${1}"${2}
+endsnippet
+#STRING -double
+snippet "\"\"p\b" "double quote" r
+"${1}"+
+"${2}"${3}
+endsnippet
+
+#CASE
+snippet "\bcase|ca\b" "case..." r
+case ${1}:${2}`!p
+if (t[2] and t[3] and t[2].find('\n') != 0):
+	snip >> 1
+	snip += ''
+else:
+	res = ''
+`${3:break;}
+endsnippet
+#DEFAULT
+snippet "\bdefault|\bdf\b" "default..." r
+default: ${1}`!p
+if (t[1] and t[2] and t[1].find('\n') != 0):
+	snip >> 1
+	snip += ' '
+else:
+	res = ''
+`${2:break;}
+endsnippet
+
+#BREAK
+snippet br "break;" w
+break;${1}
+endsnippet
+
+#CONTINUE
+snippet "\bcon\b|\bcn\b" "continue;" r
+continue;${1}
+endsnippet
+
+#CONST
+snippet "(\b|\,)(c\b|co\b)" "const" r
+`!p
+if match and match.group(1):
+	snip.rv += match.group(1) + " "
+`const`!p
+if t[1] and t[1][0] != " " and t[1][0] != "," and t[1][0] != "*" and t[1][0] != "&":
+	snip.rv += " "
+`$1
+endsnippet
+
+snippet "\bau\b|\bu\b" "auto" r
+auto`!p
+if t[1] and t[1][0] != " " and t[1][0] != "," and t[1][0] != "*" and t[1][0] != "&":
+	snip.rv += " "
+`$1
+endsnippet
+
+snippet "\bvo\b|\bv\b" "void" r
+void`!p
+if t[1] and t[1][0] != " " and t[1][0] != "," and t[1][0] != "*" and t[1][0] != "&":
+	snip.rv += " "
+`$1
+endsnippet
+
+snippet "\bbo\b|\bbl\b" "bool" r
+bool`!p
+if t[1] and t[1][0] != " " and t[1][0] != "," and t[1][0] != "*" and t[1][0] != "&":
+	snip.rv += " "
+`$1
+endsnippet
+
+snippet i8 "int8_t" w
+int8_t`!p
+if t[1] and t[1][0] != " " and t[1][0] != "," and t[1][0] != "*" and t[1][0] != "&":
+	snip.rv += " "
+`$1
+endsnippet
+
+snippet i16 "int16_t" w
+int16_t`!p
+if t[1] and t[1][0] != " " and t[1][0] != "," and t[1][0] != "*" and t[1][0] != "&":
+	snip.rv += " "
+`$1
+endsnippet
+
+snippet i3 "int32_t" w
+int32_t`!p
+if t[1] and t[1][0] != " " and t[1][0] != "," and t[1][0] != "*" and t[1][0] != "&":
+	snip.rv += " "
+`$1
+endsnippet
+
+snippet i6 "int64_t" w
+int64_t`!p
+if t[1] and t[1][0] != " " and t[1][0] != "," and t[1][0] != "*" and t[1][0] != "&":
+	snip.rv += " "
+`$1
+endsnippet
+
+snippet ui8 "uint8_t" w
+uint8_t`!p
+if t[1] and t[1][0] != " " and t[1][0] != "," and t[1][0] != "*" and t[1][0] != "&":
+	snip.rv += " "
+`$1
+endsnippet
+
+snippet ui16 "uint16_t" w
+uint16_t`!p
+if t[1] and t[1][0] != " " and t[1][0] != "," and t[1][0] != "*" and t[1][0] != "&":
+	snip.rv += " "
+`$1
+endsnippet
+
+snippet ui3 "uint32_t" w
+uint32_t`!p
+if t[1] and t[1][0] != " " and t[1][0] != "," and t[1][0] != "*" and t[1][0] != "&":
+	snip.rv += " "
+`$1
+endsnippet
+
+snippet ui6 "uint64_t" w
+uint64_t`!p
+if t[1] and t[1][0] != " " and t[1][0] != "," and t[1][0] != "*" and t[1][0] != "&":
+	snip.rv += " "
+`$1
+endsnippet
+
+snippet lo "long" w
+long`!p
+if t[1] and t[1][0] != " " and t[1][0] != "," and t[1][0] != "*" and t[1][0] != "&":
+	snip.rv += " "
+`$1
+endsnippet
+
+snippet fl "float" w
+float`!p
+if t[1] and t[1][0] != " " and t[1][0] != "," and t[1][0] != "*" and t[1][0] != "&":
+	snip.rv += " "
+`$1
+endsnippet
+
+#RETURN
+snippet "\bre\b|\bret\b" "return" r
+return${1/.+/ /}`!p
+if (t[1] and t[2] and t[1].find(' ') != 0):
+	snip >> 1
+	snip += ' '
+else:
+	res = ''
+`${1};
+endsnippet	
+
+snippet "\b([,]{0,1})e\b" "assignment" r
+`!p
+if match and match.group(1):
+	res = ' '
+else:
+	res = ''
+`= 
+endsnippet
+#e 
+
+#x
+snippet "(^|[^a-zA-Z\d,])x\b" "colon (extends)" r
+`!p
+if match and match.group(1):
+	res = match.group(1)
+`:`!p
+if t[1] and t[1][0] != " " and t[1][0].isalnum():
+	snip.rv += " "
+`${1}
+endsnippet
+
+#x
+snippet ",x\b" "colon (extends)" r
+:`!p
+if t[1] and t[1][0] != " " and t[1][0].isalnum():
+	snip.rv += " "
+`${1}
+endsnippet
+
+#cc
+snippet "\b[\,]{0,1}(xx|z)\b" "colon colon" r
+::
+endsnippet
+
+#n
+snippet "(^|\b)([,]{0,1})n\b" "not" r
+!
+endsnippet
+
+#ee
+snippet "(^|\b)([,]{0,1})ee\b" "Equality" r
+`!p
+if match and match.group(1):
+	res = ' '
+else:
+	res = ''
+`==
+endsnippet
+
+#ne
+snippet "(^|\b)([,]{0,1})ne\b" "Not equals..." r
+`!p
+if match and match.group(1):
+	res = ' '
+else:
+	res = ''
+`!=
+endsnippet
+
+#l
+snippet "(^|\b)([,]{0,1})l\b" "less than" r
+<
+endsnippet
+
+#le
+snippet "(^|\b)([,]{0,1})le\b" "less than equal" r
+`!p
+if match and match.group(1):
+	res = ' '
+else:
+	res = ''
+`<=
+endsnippet
+
+#g
+snippet "(^|\b)([,]{0,1})g\b" "greater than" r
+>
+endsnippet
+
+#ge
+snippet "\b([,]{0,1})ge\b" "greater than equal" r
+`!p
+if match and match.group(1):
+	res = ' '
+else:
+	res = ''
+`>=
+endsnippet
+
+snippet na "name .. (name)"
+`!p snip.rv = "".join([x[0].upper() + x[1:] for x in snip.basename.split("_")]) or ""`
+endsnippet
+
+snippet "\bpu\b" "public" r
+public`!p
+if (t[1] and t[1].strip()[0] != ':'):
+	res = ' '
+`${1}
+endsnippet
+snippet "\b(pr|pi)\b" "private" r
+private`!p
+if (t[1] and t[1].strip()[0] != ':'):
+	res = ' '
+`${1}
+endsnippet
+
+snippet "\bpo\b" "protected" r
+protected`!p
+if (t[1] and t[1].strip()[0] != ':'):
+	res = ' '
+`${1}
+endsnippet
+
+snippet "\bcpu\b|\bpux\b" "public .. (public)" r
+public:
+	${1}
+endsnippet
+snippet "\b(cpi|cpr|prx|pix)\b" "private .. (private)" r
+private:
+	${1}
+endsnippet
+snippet "\bcpo\b|\bpox\b" "protected .. (protected)" r
+protected:
+	${1}
+endsnippet
+
+#o
+snippet "(^|[^a-zA-Z\d:,])o\b" "or |" r
+`!p
+if match and match.group(1):
+	res = match.group(1)
+`|
+endsnippet
+
+#o
+snippet "([,]{1})o\b" "or |" r
+`!p
+if match and match.group(1):
+	res = ' '
+else:
+	res = ''
+`|
+endsnippet
+
+#oo
+snippet "\b([,]{0,1})oo\b" "or ||" r
+`!p
+if match and match.group(1):
+	res = ' '
+else:
+	res = ''
+`||
+endsnippet
+
+#a
+snippet "\b([,]{0,1})a\b" "and &" r
+`!p
+if match and match.group(1):
+	res = ' '
+else:
+	res = ''
+`&
+endsnippet
+
+#r
+snippet "(^|[^a-zA-Z\d,])r\b" "reference" r
+$1&`!p
+if t[2] and t[2][0] != " " and t[2][0] != "," and t[2][0] != "*" and t[2][0] != "&":
+	snip.rv += " "
+`$2
+endsnippet
+
+snippet ",r" "reference" r
+&`!p
+if t[1] and t[1][0] != " ":
+	snip.rv += " "
+`$1
+endsnippet
+
+#aa
+snippet "\b([,]{0,1})aa\b" "and &&" r
+`!p
+if match and match.group(1):
+	res = ' '
+else:
+	res = ''
+`&&
+endsnippet
+
+snippet "\b[,]{0,1}pa\b" "parenthesis" r
+(${1})
+endsnippet
+snippet "\b[,]{0,1}par\b" "parenthesis with array" r
+([${1}])
+endsnippet
+snippet "\b[,]{0,1}ar\b" "array" r
+[${1}]
+endsnippet
+
+#aro []
+snippet "\b[\,]{0,1}(aro|ao)\b" "array cursor out" r
+[]
+endsnippet
+
+snippet "\bb\b" "body" r
+{`!p
+if (t[1] and t[1].find('\n') != 0):
+	snip >> 1
+	snip += ''
+`$1`!p
+if (t[1] and t[1].find('\n') != 0):
+	snip += '}'
+else:
+	res = '}'
+`
+endsnippet
+
+
+snippet "\bbi\b" "inline body" r
+{$1}
+endsnippet
+
+snippet wh "while" w
+while (${1}) {`!p
+if (t[2] and t[2].find('\n') != 0):
+	snip >> 1
+	snip += ''
+else:
+	res = ''
+`${2}`!p
+if (t[2] and t[2].find('\n') != 0):
+	snip += '}'
+else:
+	res = '}'
+`${3}
+endsnippet
+snippet try "try...catch" w
+try {
+	${1}
+} catch (${2:e}) {`!p
+if (t[3] and t[3].find('\n') != 0):
+	snip >> 1
+	snip += ''
+else:
+	res=''
+`${3}`!p
+if (t[3] and t[3].find('\n') != 0):
+	snip += '}'
+else:
+	res = '}'
+`${4}
+endsnippet
+snippet do "do while" w
+do {`!p
+if (t[1] and t[1].find('\n') != 0):
+	snip >> 1
+	snip += ''
+else:
+	res=""
+`${1}`!p
+if (t[1] and t[1].find('\n') != 0):
+	snip += '}'
+else:
+	res="}"
+` while (${2})${3}
+endsnippet
+snippet for "for loop - no vars" w
+for (${1};${2};${3}) {`!p
+if (t[4] and t[4].find('\n') != 0):
+	snip >> 1
+	snip += ''
+else:
+	res = ''`${4}`!p
+if (t[4] and t[4].find('\n') != 0):
+	snip += '}'
+else:
+	res = '}'`${5}
+endsnippet
+snippet flu "for loop up" w
+for (${1};${1/(int[\s\t]*)|((=|,).*)//g}<${1/(.*,)|(=.*)|(int[\s\t]*.*)//g)/};${1/(int[\s\t]*)|((=|,).*)//g}++) {`!p
+if (t[2] and t[2].find('\n') != 0):
+	snip >> 1
+	snip += ''
+else:
+	res = ''`${2}`!p
+if (t[2] and t[2].find('\n') != 0):
+	snip += '}'
+else:
+	res = '}'`${3}
+endsnippet
+
+snippet "(^|[^a-zA-Z\d:])s\b|\bstd\b" "std" r
+`!p
+if match and match.group(1):
+	res = match.group(1)
+`std::
+endsnippet
+
+snippet "\bop\b|\bot|(:)o\b" "optional" r
+`!p
+if match and match.group(1):
+	res = match.group(1)
+`optional<$1>`!p
+if t[2] and t[2][0] != " " and t[2][0] != "," and t[2][0] != "*" and t[2][0] != "&":
+	snip.rv += " "
+`$2
+endsnippet
+
+snippet "\bsop\b|\bsot|\bso\b" "std::optional" r
+std::optional<$1>`!p
+if t[2] and t[2][0] != " " and t[2][0] != "," and t[2][0] != "*" and t[2][0] != "&":
+	snip.rv += " "
+`$2
+endsnippet
+
+snippet "(:)s\b|\bstr\b" "string" r
+`!p
+if match and match.group(1):
+	res = match.group(1)
+`string`!p
+if t[1] and t[1][0] != " " and t[1][0] != "," and t[1][0] != "*" and t[1][0] != "&":
+	snip.rv += " "
+`$1
+endsnippet
+
+snippet "\bss\b|\bsstr\b" "string" r
+std::string`!p
+if t[1] and t[1][0] != " " and t[1][0] != "," and t[1][0] != "*" and t[1][0] != "&":
+	snip.rv += " "
+`$1
+endsnippet
+
+snippet "\bsp\b" "shared_ptr" r
+shared_ptr<$1>`!p
+if t[2] and t[2][0] != " " and t[2][0] != "," and t[2][0] != "*" and t[2][0] != "&":
+	snip.rv += " "
+`$2
+endsnippet
+
+snippet "\bssp\b" "shared_ptr" r
+std::shared_ptr<$1>`!p
+if t[2] and t[2][0] != " " and t[2][0] != "," and t[2][0] != "*" and t[2][0] != "&":
+	snip.rv += " "
+`$2
+endsnippet
+
+snippet "\bfn\b|\bfu\b|\bfun\b" "function" r
+function<$1($2)>`!p
+if t[3] and t[3][0] != " " and t[3][0] != "," and t[3][0] != "*" and t[3][0] != "&":
+	snip.rv += " "
+`$3
+endsnippet
+
+snippet "\bsfn\b|\bsfu\b|\bsfun\b" "function" r
+std::function<$1($2)>`!p
+if t[3] and t[3][0] != " " and t[3][0] != "," and t[3][0] != "*" and t[3][0] != "&":
+	snip.rv += " "
+`$3
+endsnippet
+
+snippet "\bsc\b" "static" r
+static`!p
+if t[1] and t[1][0] != " ":
+	snip.rv += " "
+`${1}
+endsnippet
+
+snippet "\bil\b|\bie\b" "inline" r
+inline`!p
+if t[1] and t[1][0] != " ":
+	snip.rv += " "
+`${1}
+endsnippet
+
+# vim:ft=snippets:

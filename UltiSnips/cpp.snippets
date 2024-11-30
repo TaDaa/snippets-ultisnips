@@ -1,0 +1,209 @@
+extends c
+
+###########################################################################
+#                            TextMate Snippets                            #
+###########################################################################
+snippet beginend "$1.begin(), $1.end() (beginend)"
+${1:v}${1/^.*?(-)?(>)?$/(?2::(?1:>:.))/}begin(), $1${1/^.*?(-)?(>)?$/(?2::(?1:>:.))/}end()
+endsnippet
+
+#`!p vim.command('call feedkeys("\<C-space>")')`
+snippet "\,p\b" "pointer var" r
+->
+endsnippet
+snippet "\bfa\b" "arrow function" r
+[${1}](${2}){`!p
+if (t[3] and t[3].find('\n') != 0):
+	snip >> 1
+	snip += ''
+else:
+	res = ''`${3}`!p
+if (t[3] and t[3].find('\n') != 0):
+	snip += '}'
+else:
+	res = '}'`
+endsnippet
+
+snippet "\bvi\b" "virtual" r
+virtual`!p
+if t[1] and t[1][0] != " ":
+	snip.rv += " "
+`$1
+endsnippet
+
+snippet fe "for each" w
+for (${1}:${2/.+/ /m}${2}) {`!p
+if (t[3] and t[3].find('\n') != 0):
+	snip >> 1
+	snip += ''
+else:
+	res = ''`${3}`!p
+if (t[3] and t[3].find('\n') != 0):
+	snip += '}'
+else:
+	res = '}'`${4}
+endsnippet
+
+#cout
+snippet "\bcg|ce|cout\b" "cout" r
+std::cout << ${1} << std::endl;
+endsnippet
+
+snippet cl "class .. (class)"
+class${1/.+/ /m}${1} {`!p
+if (t[2] and t[2].find('\n') != 0):
+	snip >> 1
+	snip += ''
+else:
+	res = ''`${2}`!p
+if (t[2] and t[2].find('\n') != 0):
+	snip += '};'
+else:
+	res = '};'`
+endsnippet
+
+snippet fc "function class implementation"
+${1:return_type} ${2:namespace::class::method}($5) {`!p
+if (t[6] and t[6].find('\n') != 0):
+	snip >> 1
+	snip += ''
+else:
+	res = ''`${6}`!p
+if (t[6] and t[6].find('\n') != 0):
+	snip += '}'
+else:
+	res = '}'`
+endsnippet
+
+snippet fd "function definition"
+$1($2);
+endsnippet
+
+snippet "\bfdb\b|fdi\b" "function definition" r
+$1($2) {`!p
+if (t[3] and t[3].find('\n') != 0):
+	snip >> 1
+	snip += ''
+else:
+	res = ''`${3}`!p
+if (t[3] and t[3].find('\n') != 0):
+	snip += '}'
+else:
+	res = '}'`
+endsnippet
+
+snippet st "struct .. (struct)"
+struct${1/.+/ /m}${1} {`!p
+if (t[2] and t[2].find('\n') != 0):
+	snip >> 1
+	snip += ''
+else:
+	res = ''`${2}`!p
+if (t[2] and t[2].find('\n') != 0):
+	snip += '};'
+else:
+	res = '};'`
+endsnippet
+
+snippet cln "class .. (class)"
+class ${1:`!p snip.rv = "".join([((x[0].upper() + x[1:]) if len(x) else "") for x in snip.basename.split("_")]) or ""`} {`!p
+if (t[2] and t[2].find('\n') != 0):
+	snip >> 1
+	snip += ''
+else:
+	res = ''`${2}`!p
+if (t[2] and t[2].find('\n') != 0):
+	snip += '};'
+else:
+	res = '};'`
+endsnippet
+
+snippet stn "struct"
+struct ${1:`!p snip.rv = "".join([((x[0].upper() + x[1:]) if len(x) else "") for x in snip.basename.split("_")]) or ""`} {`!p
+if (t[2] and t[2].find('\n') != 0):
+	snip >> 1
+	snip += ''
+else:
+	res = ''`${2}`!p
+if (t[2] and t[2].find('\n') != 0):
+	snip += '};'
+else:
+	res = '};'`
+endsnippet
+
+snippet "\bclvi|clvir\b" "class virtual .. (class virtual)" r
+class ${1:`!p snip.rv = snip.basename or "name"`}
+{
+public:
+	virtual ~${1/(\w+).*/$1/} ();
+${2}
+};
+endsnippet
+
+snippet ns "namespace .. (namespace)"
+namespace${1/.+/ /m}${1} {`!p
+if (t[2] and t[2].find('\n') != 0):
+	snip >> 1
+	snip += ''
+else:
+	res = ''`${2}`!p
+if (t[2] and t[2].find('\n') != 0):
+	snip += '}'
+else:
+	res = '}'`
+endsnippet
+
+#using
+snippet "\bus\b" "using" r
+using`!p
+if t[1] and t[1][0] != " ":
+	snip.rv += " "
+`$1
+endsnippet
+
+snippet readfile "read file (readF)"
+std::vector<char> v;
+if (FILE *fp = fopen(${1:"filename"}, "r"))
+{
+	char buf[1024];
+	while(size_t len = fread(buf, 1, sizeof(buf), fp))
+		v.insert(v.end(), buf, buf + len);
+	fclose(fp);
+}
+endsnippet
+
+#co_return
+snippet "\bcr\b|\bcre\b|\bcor\b" "co_return" r
+co_return${1/.+/ /}`!p
+if (t[1] and t[2] and t[1].find(' ') != 0):
+	snip >> 1
+	snip += ' '
+else:
+	res = ''
+`${1};
+endsnippet	
+
+#co_await
+snippet "\bca\b|\bcoa\b" "co_await" r
+co_await${1/.+/ /}`!p
+if (t[1] and t[2] and t[1].find(' ') != 0):
+	snip >> 1
+	snip += ' '
+else:
+	res = ''
+`${1};
+endsnippet	
+
+snippet map "std::map (map)"
+std::map<${1:key}, ${2:value}> map$0;
+endsnippet
+
+snippet vector "std::vector (v)"
+std::vector<${1:char}> v$0;
+endsnippet
+
+snippet tp "template <typename ..> (template)"
+template <typename ${1:_InputIter}>
+endsnippet
+
+# vim:ft=snippets:
